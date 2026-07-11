@@ -5,4 +5,4 @@
 // 2. Click "Get API Key" and sign up (free, no billing/card required)
 // 3. Copy the API key it gives you and paste it below
 // ============================================================
-export const IMGBB_API_KEY = "YOUR_IMGBB_API_KEY";
+export const IMGBB_API_KEY = "d1dbcbbe6dd64dcab0991391dc6ef00b";
