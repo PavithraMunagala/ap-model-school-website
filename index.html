@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>School Website</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#142440; --navy-deep:#0b1830; --gold:#c9972b; --gold-light:#e4bd63;
+    --maroon:#7a1f2b; --paper:#faf7f0; --paper-dim:#f0ebdd; --ink:#23252b; --ink-soft:#5b5d66;
+    --line:#e2dbc8; --white:#ffffff; --radius:4px;
+    --shadow:0 10px 30px rgba(11,24,48,.12); --shadow-lg:0 20px 50px rgba(11,24,48,.22);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;font-family:'Inter',sans-serif;background:var(--paper);color:var(--ink);line-height:1.6;}
+  h1,h2,h3,h4{font-family:'Fraunces',serif;margin:0 0 .4em 0;color:var(--navy);letter-spacing:-.01em;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.14em;font-size:.72rem;color:var(--maroon);font-weight:500;}
+  a{color:inherit;} img{max-width:100%;display:block;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px;}
+  section{padding:88px 0;}
+  button{font-family:'Inter',sans-serif;cursor:pointer;}
+  textarea, input, select{font-family:'Inter',sans-serif;}
+
+  /* ===== NAV ===== */
+  header.site-nav{position:sticky;top:0;z-index:200;background:var(--navy);border-bottom:3px solid var(--gold);}
+  .nav-inner{max-width:1180px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:72px;}
+  .brand{display:flex;align-items:center;gap:12px;color:var(--white);text-decoration:none;}
+  .crest{width:38px;height:38px;border-radius:50%;background:radial-gradient(circle at 35% 30%, var(--gold-light), var(--gold) 60%, var(--maroon) 140%);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:700;color:var(--navy-deep);font-size:1.05rem;box-shadow:inset 0 0 0 2px rgba(255,255,255,.5);flex-shrink:0;overflow:hidden;}
+  .crest img{width:100%;height:100%;object-fit:cover;}
+  .brand-text .name{font-family:'Fraunces',serif;font-weight:600;font-size:1.12rem;line-height:1.1;}
+  .brand-text .tagline{font-family:'IBM Plex Mono',monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-light);}
+  nav.links{display:flex;gap:6px;align-items:center;}
+  nav.links a{color:var(--paper);text-decoration:none;font-size:.88rem;font-weight:500;padding:8px 12px;border-radius:3px;transition:background .15s, color .15s;white-space:nowrap;}
+  nav.links a:hover{background:rgba(255,255,255,.08);color:var(--gold-light);}
+  .nav-cta{background:var(--gold)!important;color:var(--navy-deep)!important;font-weight:700!important;margin-left:6px;}
+  .nav-cta:hover{background:var(--gold-light)!important;}
+  .nav-admin-btn{border:1px solid rgba(255,255,255,.3)!important;margin-left:6px;}
+  .hamburger{display:none;background:none;border:none;color:var(--white);font-size:1.5rem;padding:4px;}
+
+  /* ===== ADMIN BAR ===== */
+  .admin-bar{display:none;background:var(--maroon);color:var(--white);}
+  .admin-bar.on{display:block;}
+  .admin-bar .wrap{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;flex-wrap:wrap;gap:10px;}
+  .admin-bar .left{display:flex;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace;font-size:.76rem;letter-spacing:.06em;}
+  .admin-bar .left .dot{width:8px;height:8px;border-radius:50%;background:#6be08a;box-shadow:0 0 0 3px rgba(107,224,138,.25);}
+  .admin-bar .right{display:flex;gap:8px;flex-wrap:wrap;}
+  .abtn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);color:var(--white);padding:7px 14px;border-radius:3px;font-size:.78rem;font-weight:600;position:relative;}
+  .abtn:hover{background:rgba(255,255,255,.22);}
+  .abtn.exit{background:var(--navy-deep);}
+  .badge{position:absolute;top:-7px;right:-7px;background:var(--gold);color:var(--navy-deep);font-size:.62rem;font-weight:800;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;}
+  @keyframes flashHighlight{0%{box-shadow:0 0 0 4px rgba(201,151,43,0);}30%{box-shadow:0 0 0 4px rgba(201,151,43,.6);}100%{box-shadow:0 0 0 4px rgba(201,151,43,0);}}
+  .flash-highlight{animation:flashHighlight 1.4s ease-out;}
+
+  /* ===== HERO ===== */
+  .hero{position:relative;background:radial-gradient(ellipse at 20% -10%, rgba(201,151,43,.25), transparent 55%),linear-gradient(180deg, var(--navy) 0%, var(--navy-deep) 100%);color:var(--paper);padding:120px 0 100px;overflow:hidden;}
+  .hero::after{content:"";position:absolute;inset:0;background-image:repeating-linear-gradient(115deg, rgba(255,255,255,.025) 0 2px, transparent 2px 60px);pointer-events:none;}
+  .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center;position:relative;}
+  .hero h1{color:var(--white);font-size:2.9rem;font-weight:600;line-height:1.1;margin-bottom:20px;}
+  .hero p.lead{font-size:1.08rem;color:#cfd6e6;max-width:46ch;margin-bottom:32px;}
+  .btn-row{display:flex;gap:14px;flex-wrap:wrap;}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:13px 26px;border-radius:3px;font-weight:600;font-size:.92rem;text-decoration:none;border:1.5px solid transparent;transition:transform .15s, box-shadow .15s;}
+  .btn-primary{background:var(--gold);color:var(--navy-deep);}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(201,151,43,.35);}
+  .btn-ghost{border-color:rgba(255,255,255,.35);color:var(--paper);background:transparent;}
+  .btn-ghost:hover{border-color:var(--gold-light);color:var(--gold-light);}
+  .stat-row{display:flex;gap:36px;margin-top:44px;flex-wrap:wrap;}
+  .stat .num{font-family:'Fraunces',serif;font-size:1.9rem;color:var(--gold-light);font-weight:600;}
+  .stat .lbl{font-size:.74rem;color:#aab3c9;text-transform:uppercase;letter-spacing:.08em;}
+  .hero-photo{position:relative;border-radius:6px;overflow:hidden;box-shadow:var(--shadow-lg);aspect-ratio:4/5;border:1px solid rgba(255,255,255,.15);}
+  .hero-photo img{width:100%;height:100%;object-fit:cover;}
+
+  .sec-head{max-width:640px;margin-bottom:48px;}
+  .sec-head h2{font-size:2.1rem;} .sec-head p{color:var(--ink-soft);font-size:1.02rem;margin-top:10px;}
+  .sec-head-row{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;}
+
+  .about{background:var(--white);}
+  .about-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:60px;align-items:center;}
+  .about-photo{border-radius:6px;overflow:hidden;box-shadow:var(--shadow);}
+  .about-photo img{aspect-ratio:1/1;object-fit:cover;}
+  .value-list{list-style:none;padding:0;margin:24px 0 0;display:grid;gap:16px;}
+  .value-list li{display:flex;gap:14px;align-items:flex-start;}
+  .value-list .dot{width:8px;height:8px;border-radius:50%;background:var(--gold);margin-top:8px;flex-shrink:0;}
+  .value-list strong{color:var(--navy);font-family:'Fraunces',serif;font-weight:600;}
+
+  .academics{background:var(--paper-dim);}
+  .prog-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+  .prog-card{background:var(--white);border:1px solid var(--line);border-radius:6px;padding:28px 22px;transition:transform .18s, box-shadow .18s;position:relative;}
+  .prog-card:hover{transform:translateY(-4px);box-shadow:var(--shadow);}
+  .prog-card .grade{font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--maroon);letter-spacing:.08em;text-transform:uppercase;}
+  .prog-card h4{margin:10px 0 8px;font-size:1.1rem;}
+  .prog-card p{font-size:.9rem;color:var(--ink-soft);margin:0;}
+
+  .bulletin{background:radial-gradient(circle at 8% 20%, rgba(0,0,0,.05), transparent 40%),linear-gradient(180deg, #b99866, #ab8757);position:relative;}
+  .bulletin::before{content:"";position:absolute;inset:0;background-image:repeating-linear-gradient(0deg, rgba(0,0,0,.05) 0 1px, transparent 1px 3px),repeating-linear-gradient(90deg, rgba(0,0,0,.05) 0 1px, transparent 1px 3px);opacity:.5;}
+  .bulletin .sec-head h2, .bulletin .sec-head p{color:var(--white);}
+  .bulletin .sec-head .eyebrow{color:var(--gold-light);}
+  .pin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;position:relative;}
+  .pin-card{background:var(--paper);border-radius:2px;padding:26px 22px 22px;box-shadow:0 12px 20px rgba(0,0,0,.25);position:relative;transform:rotate(var(--tilt,0deg));transition:transform .2s;}
+  .pin-card:nth-child(3n+1){--tilt:-1.4deg;} .pin-card:nth-child(3n+2){--tilt:1deg;} .pin-card:nth-child(3n+3){--tilt:-.6deg;}
+  .pin-card:hover{transform:rotate(0deg) translateY(-4px);}
+  .pin-card .pin{position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 35% 30%, #e34848, #a32020);box-shadow:0 3px 5px rgba(0,0,0,.4);}
+  .pin-card .medal{width:44px;height:44px;border-radius:50%;background:radial-gradient(circle at 35% 30%, var(--gold-light), var(--gold) 60%, #8a6414 140%);display:flex;align-items:center;justify-content:center;color:var(--navy-deep);font-family:'Fraunces',serif;font-weight:700;margin-bottom:14px;}
+  .pin-card h4{font-size:1.05rem;margin-bottom:6px;} .pin-card p{font-size:.88rem;color:var(--ink-soft);margin:0 0 10px;}
+  .pin-card .date{font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:var(--maroon);}
+  .pin-card img{width:100%;border-radius:3px;margin-bottom:12px;aspect-ratio:16/10;object-fit:cover;}
+  .empty-note{color:rgba(255,255,255,.85);font-size:.92rem;font-style:italic;}
+
+  .gallery{background:var(--white);}
+  .gal-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  .gal-item{position:relative;border-radius:5px;overflow:hidden;aspect-ratio:1/1;box-shadow:0 2px 8px rgba(0,0,0,.08);}
+  .gal-item img{width:100%;height:100%;object-fit:cover;transition:transform .3s;}
+  .gal-item:hover img{transform:scale(1.06);}
+  .gal-item .cap{position:absolute;left:0;right:0;bottom:0;padding:10px 12px 8px;background:linear-gradient(0deg, rgba(11,24,48,.85), transparent);color:var(--white);font-size:.76rem;opacity:0;transition:opacity .2s;}
+  .gal-item:hover .cap{opacity:1;}
+
+  .notices{background:var(--paper-dim);}
+  .notice-list{display:grid;gap:16px;}
+  .notice-card{display:grid;grid-template-columns:100px 1fr auto;gap:20px;align-items:center;background:var(--white);border:1px solid var(--line);border-left:4px solid var(--maroon);border-radius:4px;padding:18px 22px;position:relative;}
+  .notice-card.is-new::after{content:"NEW";position:absolute;top:-9px;right:16px;background:var(--maroon);color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:.62rem;letter-spacing:.08em;padding:3px 9px;border-radius:2px;box-shadow:0 2px 5px rgba(0,0,0,.2);}
+  .notice-date{text-align:center;font-family:'IBM Plex Mono',monospace;color:var(--navy);border-right:1px dashed var(--line);padding-right:16px;}
+  .notice-date .d{font-size:1.6rem;font-weight:700;line-height:1;} .notice-date .m{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--maroon);}
+  .notice-body h4{font-size:1.02rem;margin-bottom:4px;} .notice-body p{font-size:.88rem;color:var(--ink-soft);margin:0;}
+  .notice-img{width:70px;height:70px;object-fit:cover;border-radius:4px;}
+
+  .admissions{background:linear-gradient(135deg, var(--navy) 0%, var(--navy-deep) 100%);color:var(--paper);}
+  .admissions .sec-head h2, .admissions .sec-head p{color:var(--paper);}
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-bottom:44px;}
+  .step{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:22px;}
+  .step .n{font-family:'Fraunces',serif;color:var(--gold-light);font-size:1.6rem;font-weight:600;}
+  .step h4{color:var(--white);font-size:1rem;margin:8px 0 6px;} .step p{font-size:.86rem;color:#c4cbdc;margin:0;}
+
+  .contact{background:var(--white);}
+  .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;}
+  .info-row{display:flex;gap:14px;margin-bottom:20px;align-items:flex-start;}
+  .info-row .ic{width:38px;height:38px;border-radius:50%;background:var(--paper-dim);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--maroon);font-weight:700;}
+  form.enquiry{display:grid;gap:14px;}
+  form.enquiry input, form.enquiry textarea{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:4px;font-size:.92rem;background:var(--paper-dim);}
+  form.enquiry textarea{min-height:100px;resize:vertical;}
+  form.enquiry .btn-primary{border:none;justify-self:start;}
+  .form-note{font-size:.78rem;color:var(--ink-soft);margin-top:-4px;}
+
+  footer{background:var(--navy-deep);color:#aab3c9;padding:48px 0 24px;}
+  .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px;margin-bottom:32px;}
+  footer h5{color:var(--white);font-family:'Fraunces',serif;font-size:1rem;margin-bottom:14px;}
+  footer a{color:#aab3c9;text-decoration:none;font-size:.88rem;display:block;margin-bottom:8px;}
+  footer a:hover{color:var(--gold-light);}
+  .foot-bottom{border-top:1px solid rgba(255,255,255,.1);padding-top:20px;font-size:.78rem;text-align:center;color:#7d869c;}
+
+  /* ===== Admin inline panels & edit buttons ===== */
+  .admin-panel{display:none;background:var(--navy-deep);border:1px dashed var(--gold);border-radius:6px;padding:20px;margin-top:24px;}
+  .admin-panel.open{display:block;}
+  .admin-panel h5{color:var(--gold-light);font-family:'IBM Plex Mono',monospace;font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;}
+  .admin-form{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+  .admin-form input, .admin-form textarea{padding:9px 11px;border-radius:3px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.05);color:var(--white);font-size:.84rem;}
+  .admin-form textarea{grid-column:1/-1;min-height:60px;resize:vertical;}
+  .admin-form .full{grid-column:1/-1;}
+  .admin-form label{grid-column:1/-1;font-size:.72rem;color:var(--gold-light);font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.06em;margin-bottom:-4px;}
+  .btn-add{background:var(--gold);color:var(--navy-deep);border:none;padding:9px 18px;border-radius:3px;font-weight:700;font-size:.82rem;grid-column:1/-1;justify-self:start;}
+  .btn-add:disabled, button:disabled{opacity:.55;cursor:not-allowed;}
+  .upload-row{display:flex;align-items:center;gap:12px;}
+  .upload-row input[type="file"]{flex:1;padding:8px;font-size:.78rem;}
+  .img-preview{width:48px;height:48px;border-radius:4px;object-fit:cover;display:none;border:1px solid rgba(255,255,255,.2);}
+  .img-preview.show{display:block;}
+  .upload-status{font-size:.72rem;color:var(--gold-light);grid-column:1/-1;margin-top:-6px;display:none;}
+  .upload-status.show{display:block;}
+  .del-btn{background:var(--maroon);color:var(--white);border:none;border-radius:3px;font-size:.68rem;padding:4px 8px;font-weight:600;}
+  .card-admin-row{margin-top:10px;display:flex;justify-content:flex-end;}
+  .edit-fab{background:var(--navy);color:var(--gold-light);border:1px solid var(--gold);border-radius:3px;font-size:.72rem;font-weight:600;padding:6px 12px;}
+
+  /* ===== Modal ===== */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(11,24,48,.72);z-index:500;align-items:center;justify-content:center;padding:20px;}
+  .modal-overlay.open{display:flex;}
+  .modal{background:var(--paper);border-radius:8px;max-width:640px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:var(--shadow-lg);}
+  .modal-head{background:var(--navy);color:var(--white);padding:18px 24px;display:flex;justify-content:space-between;align-items:center;border-radius:8px 8px 0 0;position:sticky;top:0;}
+  .modal-head h3{color:var(--white);margin:0;font-size:1.15rem;}
+  .modal-close{background:none;border:none;color:var(--gold-light);font-size:1.4rem;line-height:1;}
+  .modal-body{padding:24px;}
+  .modal-body .admin-form{grid-template-columns:1fr 1fr;}
+  .modal-section-title{grid-column:1/-1;font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--maroon);text-transform:uppercase;letter-spacing:.08em;margin:14px 0 -2px;border-top:1px solid var(--line);padding-top:14px;}
+  .modal-body .admin-form input, .modal-body .admin-form textarea{background:var(--white);color:var(--ink);border:1px solid var(--line);}
+  .modal-body .img-preview{border:1px solid var(--line);}
+  .modal-body label{color:var(--maroon);}
+  .modal-actions{grid-column:1/-1;display:flex;gap:10px;margin-top:12px;}
+  .msg-item{border:1px solid var(--line);border-radius:5px;padding:14px 16px;margin-bottom:10px;background:var(--white);}
+  .msg-item .meta{font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:var(--ink-soft);margin-bottom:6px;}
+  .msg-item .name{font-weight:700;color:var(--navy);}
+  .msg-empty{color:var(--ink-soft);font-style:italic;padding:20px 0;text-align:center;}
+  .login-modal{max-width:380px;}
+  .login-modal .modal-body{display:grid;gap:12px;}
+  .login-modal input{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:4px;font-size:.92rem;}
+  .login-hint{font-size:.76rem;color:var(--ink-soft);}
+  .login-error{color:var(--maroon);font-size:.82rem;display:none;}
+
+  .admin-fab{position:fixed;bottom:24px;right:24px;z-index:300;background:var(--maroon);color:var(--white);border:none;border-radius:50px;padding:13px 20px;font-weight:600;font-size:.85rem;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:8px;}
+  .toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--navy);color:var(--white);padding:16px 28px;border-radius:6px;font-size:.95rem;font-weight:600;box-shadow:var(--shadow-lg);z-index:700;opacity:0;transition:all .25s;pointer-events:none;max-width:90vw;text-align:center;border:2px solid transparent;}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+  .toast.toast-success{background:#1e4d2b;border-color:#6be08a;}
+  .toast.toast-error{background:var(--maroon);border-color:#ff8a8a;}
+
+  @media (max-width:900px){
+    .hero-grid, .about-grid, .contact-grid{grid-template-columns:1fr;}
+    .hero-photo{order:-1;max-width:340px;}
+    .prog-grid, .pin-grid, .gal-grid{grid-template-columns:repeat(2,1fr);}
+    .steps{grid-template-columns:repeat(2,1fr);}
+    .foot-grid{grid-template-columns:1fr;}
+    nav.links{display:none;position:absolute;top:72px;left:0;right:0;background:var(--navy);flex-direction:column;padding:10px;border-bottom:3px solid var(--gold);}
+    nav.links.open{display:flex;}
+    .hamburger{display:block;}
+    .notice-card{grid-template-columns:70px 1fr;}
+    .notice-img{display:none;}
+    .admin-form, .modal-body .admin-form{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a href="javascript:void(0)" class="brand" onclick="scrollToSection('home',event)">
+      <span class="crest" id="crestBox"><span id="crestInitials">AP</span></span>
+      <span class="brand-text">
+        <div class="name" id="navSchoolName">AP Model School</div>
+        <div class="tagline" id="navTagline">Est. 1978 &middot; Learn &middot; Grow &middot; Lead</div>
+      </span>
+    </a>
+    <button class="hamburger" id="hamburgerBtn">&#9776;</button>
+    <nav class="links" id="navLinks">
+      <a href="javascript:void(0)" onclick="scrollToSection('about',event)">About</a>
+      <a href="javascript:void(0)" onclick="scrollToSection('academics',event)">Academics</a>
+      <a href="javascript:void(0)" onclick="scrollToSection('achievements',event)">Achievements</a>
+      <a href="javascript:void(0)" onclick="scrollToSection('gallery',event)">Gallery</a>
+      <a href="javascript:void(0)" onclick="scrollToSection('notices',event)">Events</a>
+      <a href="javascript:void(0)" onclick="scrollToSection('admissions',event)">Admissions</a>
+      <a href="javascript:void(0)" onclick="scrollToSection('contact',event)">Contact</a>
+      <a href="javascript:void(0)" class="nav-cta" onclick="scrollToSection('contact',event)">Apply Now</a>
+      <a href="#" class="nav-admin-btn" id="navAdminBtn" onclick="openLogin(event)">Admin Login</a>
+    </nav>
+  </div>
+</header>
+
+<div class="admin-bar" id="adminBar">
+  <div class="wrap">
+    <div class="left"><span class="dot"></span> Admin Mode — you're editing the live site</div>
+    <div class="right">
+      <button class="abtn" onclick="openSettingsModal()">Edit Site Info &amp; Logo</button>
+      <button class="abtn" onclick="scrollToSection('academics')">Academics</button>
+      <button class="abtn" onclick="scrollToSection('achievements')">Achievements</button>
+      <button class="abtn" onclick="scrollToSection('gallery')">Gallery</button>
+      <button class="abtn" onclick="scrollToSection('notices')">Events</button>
+      <button class="abtn" onclick="openMessagesModal()">Messages <span class="badge" id="msgBadge" style="display:none;">0</span></button>
+      <button class="abtn exit" onclick="exitAdmin()">Exit Admin Mode</button>
+    </div>
+  </div>
+</div>
+
+<section class="hero" id="home">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow" style="color:var(--gold-light);margin-bottom:14px;">Admissions open for 2026&ndash;27</div>
+      <h1 id="heroTitle">Where every child finds their <em style="font-style:italic;color:var(--gold-light);">reason to shine.</em></h1>
+      <p class="lead" id="heroLead">AP Model School blends strong academics, creative expression, and character-building in a nurturing K&ndash;12 campus.</p>
+      <div class="btn-row">
+        <a href="javascript:void(0)" class="btn btn-primary" onclick="scrollToSection('admissions',event)">Apply Now &rarr;</a>
+        <a href="javascript:void(0)" class="btn btn-ghost" onclick="scrollToSection('contact',event)">Book a Campus Visit</a>
+      </div>
+      <div class="stat-row" id="statRow"></div>
+    </div>
+    <div class="hero-photo">
+      <img id="heroImg" src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=800&auto=format&fit=crop" alt="Students on campus">
+    </div>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div class="wrap about-grid">
+    <div class="about-photo"><img id="aboutImg" src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?q=80&w=800&auto=format&fit=crop" alt="School building"></div>
+    <div>
+      <div class="eyebrow">Who we are</div>
+      <h2 id="aboutTitle">A community built on curiosity and care.</h2>
+      <p id="aboutText" style="color:var(--ink-soft);">For over four decades, we have been a home for young minds to question, explore, and grow.</p>
+      <ul class="value-list" id="valueList"></ul>
+    </div>
+  </div>
+</section>
+
+<section class="academics" id="academics">
+  <div class="wrap">
+    <div class="sec-head-row">
+      <div class="sec-head" style="margin-bottom:24px;">
+        <div class="eyebrow">Academics</div>
+        <h2>Programs for every stage</h2>
+        <p>A structured pathway from early years to senior secondary.</p>
+      </div>
+    </div>
+    <div class="prog-grid" id="progGrid"></div>
+    <div class="admin-panel" id="progAdminPanel">
+      <h5>+ Add a program</h5>
+      <div class="admin-form">
+        <input type="text" id="progGrade" placeholder="Grade range (e.g. Grade 9 – 12)">
+        <input type="text" id="progTitle" placeholder="Title (e.g. Senior Secondary)">
+        <textarea id="progDesc" placeholder="Short description"></textarea>
+        <button class="btn-add" onclick="addProgram()">Add program</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bulletin" id="achievements">
+  <div class="wrap">
+    <div class="sec-head"><div class="eyebrow">Bulletin board</div><h2>Our achievements</h2><p>Pinned proudly — a look at what our students and staff have earned.</p></div>
+    <div class="pin-grid" id="achGrid"></div>
+    <div class="admin-panel" id="achAdminPanel">
+      <h5>+ Add an achievement</h5>
+      <div class="admin-form">
+        <input type="text" id="achTitle" placeholder="Title (e.g. State Chess Champions)">
+        <input type="text" id="achDate" placeholder="Date (e.g. Mar 2026)">
+        <textarea id="achDesc" placeholder="Short description"></textarea>
+        <label class="full" style="grid-column:1/-1;font-size:.72rem;color:var(--gold-light);text-transform:uppercase;">Photo (optional)</label>
+        <div class="full upload-row">
+          <input type="file" id="achImgFile" accept="image/*" onchange="handleImageUpload(this,'achImg','achImgPreview','achAddBtn')">
+          <img id="achImgPreview" class="img-preview">
+        </div>
+        <input type="hidden" id="achImg">
+        <button class="btn-add" id="achAddBtn" onclick="addAchievement()">Pin to board</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="gallery" id="gallery">
+  <div class="wrap">
+    <div class="sec-head"><div class="eyebrow">Campus life</div><h2>Photo gallery</h2><p>Snapshots from classrooms, sports day, and everything in between.</p></div>
+    <div class="gal-grid" id="galGrid"></div>
+    <div class="admin-panel" id="galAdminPanel">
+      <h5>+ Add a photo</h5>
+      <div class="admin-form">
+        <label class="full" style="font-size:.72rem;color:var(--gold-light);text-transform:uppercase;">Photo</label>
+        <div class="full upload-row">
+          <input type="file" id="galUrlFile" accept="image/*" onchange="handleImageUpload(this,'galUrl','galUrlPreview','galAddBtn')">
+          <img id="galUrlPreview" class="img-preview">
+        </div>
+        <input type="hidden" id="galUrl">
+        <input type="text" id="galCap" class="full" placeholder="Caption (e.g. Annual Sports Day 2026)">
+        <button class="btn-add" id="galAddBtn" onclick="addGalleryImage()">Add photo</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="notices" id="notices">
+  <div class="wrap">
+    <div class="sec-head"><div class="eyebrow">Stay in the loop</div><h2>Events &amp; invitations</h2><p>Upcoming functions, ceremonies, and notices for parents and students.</p></div>
+    <div class="notice-list" id="noticeList"></div>
+    <div class="admin-panel" id="noticeAdminPanel">
+      <h5>+ Add an event / invitation</h5>
+      <div class="admin-form">
+        <input type="text" id="notTitle" placeholder="Title (e.g. Annual Day Function)">
+        <input type="date" id="notDate">
+        <textarea id="notDesc" class="full" placeholder="Details"></textarea>
+        <label class="full" style="font-size:.72rem;color:var(--gold-light);text-transform:uppercase;">Invitation card / photo (optional)</label>
+        <div class="full upload-row">
+          <input type="file" id="notImgFile" accept="image/*" onchange="handleImageUpload(this,'notImg','notImgPreview','notAddBtn')">
+          <img id="notImgPreview" class="img-preview">
+        </div>
+        <input type="hidden" id="notImg">
+        <button class="btn-add" id="notAddBtn" onclick="addNotice()">Post notice</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="admissions" id="admissions">
+  <div class="wrap">
+    <div class="sec-head"><div class="eyebrow">Join us</div><h2>Admissions process</h2><p>A simple four-step journey from inquiry to enrollment.</p></div>
+    <div class="steps" id="stepsRow"></div>
+    <div class="btn-row"><a href="javascript:void(0)" class="btn btn-primary" onclick="scrollToSection('contact',event)">Start Application &rarr;</a></div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap contact-grid">
+    <div>
+      <div class="eyebrow">Get in touch</div>
+      <h2>Send us your questions</h2>
+      <div style="margin-top:28px;">
+        <div class="info-row"><span class="ic">&#9742;</span><div><strong>Phone</strong><br><span style="color:var(--ink-soft);" id="cPhone">+91 98765 43210</span></div></div>
+        <div class="info-row"><span class="ic">&#9993;</span><div><strong>Email</strong><br><span style="color:var(--ink-soft);" id="cEmail">admissions@riverstoneschool.edu</span></div></div>
+        <div class="info-row"><span class="ic">&#9776;</span><div><strong>Address</strong><br><span style="color:var(--ink-soft);" id="cAddress">142 Riverstone Avenue, Uppal Kalan, Telangana</span></div></div>
+      </div>
+    </div>
+    <form class="enquiry" id="enquiryForm">
+      <input type="text" id="qName" placeholder="Your Name" required>
+      <input type="email" id="qEmail" placeholder="Email Address" required>
+      <input type="tel" id="qPhone" placeholder="Phone Number">
+      <textarea id="qMsg" placeholder="Your question or query" required></textarea>
+      <button type="submit" class="btn btn-primary">Send Question</button>
+      <span class="form-note">Your question goes straight to the school office — we'll get back to you soon.</span>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <h5 id="footSchoolName">AP Model School</h5>
+        <p style="font-size:.85rem;max-width:32ch;" id="footDesc">A K&ndash;12 institution committed to academic excellence and holistic growth since 1978.</p>
+      </div>
+      <div>
+        <h5>Quick Links</h5>
+        <a href="javascript:void(0)" onclick="scrollToSection('about',event)">About Us</a><a href="javascript:void(0)" onclick="scrollToSection('academics',event)">Academics</a><a href="javascript:void(0)" onclick="scrollToSection('admissions',event)">Admissions</a><a href="javascript:void(0)" onclick="scrollToSection('contact',event)">Contact</a>
+      </div>
+      <div>
+        <h5>Connect</h5>
+        <a href="#">Facebook</a><a href="#">Instagram</a><a href="#">YouTube</a>
+      </div>
+    </div>
+    <div class="foot-bottom" id="footBottom">&copy; 2026 AP Model School. All rights reserved.</div>
+  </div>
+</footer>
+
+<button class="admin-fab" id="adminFab" onclick="openLogin()">&#9998; Admin Login</button>
+<div class="toast" id="toast"></div>
+
+<!-- LOGIN MODAL -->
+<div class="modal-overlay" id="loginOverlay">
+  <div class="modal login-modal">
+    <div class="modal-head"><h3>Admin Login</h3><button class="modal-close" onclick="closeModal('loginOverlay')">&times;</button></div>
+    <div class="modal-body">
+      <p style="font-size:.85rem;color:var(--ink-soft);margin:0;">Enter your admin email and password to edit the website.</p>
+      <input type="email" id="loginUser" placeholder="Admin email" autocomplete="username">
+      <input type="password" id="loginPass" placeholder="Password" autocomplete="current-password">
+      <div class="login-error" id="loginError">Incorrect email or password.</div>
+      <button class="btn btn-primary" style="border:none;justify-self:start;" onclick="attemptLogin()">Log In</button>
+    </div>
+  </div>
+</div>
+
+<!-- SETTINGS MODAL -->
+<div class="modal-overlay" id="settingsOverlay">
+  <div class="modal">
+    <div class="modal-head"><h3>Edit Site Info</h3><button class="modal-close" onclick="closeModal('settingsOverlay')">&times;</button></div>
+    <div class="modal-body">
+      <div class="admin-form" id="settingsForm">
+        <div class="modal-section-title">Branding</div>
+        <label class="full">School name</label>
+        <input type="text" class="full" id="sSchoolName">
+        <label>Tagline</label><input type="text" id="sTagline">
+        <label>Logo initials (2 letters)</label><input type="text" id="sLogoInitials" maxlength="3">
+        <label class="full">Logo image (upload from your device, or leave blank to use initials)</label>
+        <div class="full upload-row">
+          <input type="file" id="sLogoUrlFile" accept="image/*" onchange="handleImageUpload(this,'sLogoUrl','sLogoUrlPreview','settingsSaveBtn')">
+          <img id="sLogoUrlPreview" class="img-preview">
+        </div>
+        <input type="hidden" id="sLogoUrl">
+
+        <div class="modal-section-title">Hero Section</div>
+        <label class="full">Heading</label><textarea class="full" id="sHeroTitle"></textarea>
+        <label class="full">Subtext</label><textarea class="full" id="sHeroLead"></textarea>
+        <label class="full">Hero image (upload from your device)</label>
+        <div class="full upload-row">
+          <input type="file" id="sHeroImgFile" accept="image/*" onchange="handleImageUpload(this,'sHeroImg','sHeroImgPreview','settingsSaveBtn')">
+          <img id="sHeroImgPreview" class="img-preview">
+        </div>
+        <input type="hidden" id="sHeroImg">
+
+        <div class="modal-section-title">Stats (shown under hero)</div>
+        <label>Stat 1 number</label><input type="text" id="sStat1n">
+        <label>Stat 1 label</label><input type="text" id="sStat1l">
+        <label>Stat 2 number</label><input type="text" id="sStat2n">
+        <label>Stat 2 label</label><input type="text" id="sStat2l">
+        <label>Stat 3 number</label><input type="text" id="sStat3n">
+        <label>Stat 3 label</label><input type="text" id="sStat3l">
+        <label>Stat 4 number</label><input type="text" id="sStat4n">
+        <label>Stat 4 label</label><input type="text" id="sStat4l">
+
+        <div class="modal-section-title">About Section</div>
+        <label class="full">Heading</label><input type="text" class="full" id="sAboutTitle">
+        <label class="full">Text</label><textarea class="full" id="sAboutText"></textarea>
+        <label class="full">About image (upload from your device)</label>
+        <div class="full upload-row">
+          <input type="file" id="sAboutImgFile" accept="image/*" onchange="handleImageUpload(this,'sAboutImg','sAboutImgPreview','settingsSaveBtn')">
+          <img id="sAboutImgPreview" class="img-preview">
+        </div>
+        <input type="hidden" id="sAboutImg">
+        <label>Value 1 title</label><input type="text" id="sVal1t"><label>Value 1 text</label><input type="text" id="sVal1d">
+        <label>Value 2 title</label><input type="text" id="sVal2t"><label>Value 2 text</label><input type="text" id="sVal2d">
+        <label>Value 3 title</label><input type="text" id="sVal3t"><label>Value 3 text</label><input type="text" id="sVal3d">
+
+        <div class="modal-section-title">Contact &amp; Footer</div>
+        <label>Phone</label><input type="text" id="sPhone">
+        <label>Email</label><input type="text" id="sEmail">
+        <label class="full">Address</label><input type="text" class="full" id="sAddress">
+        <label class="full">Footer description</label><textarea class="full" id="sFootDesc"></textarea>
+
+        <div class="modal-actions">
+          <button class="btn btn-primary" id="settingsSaveBtn" style="border:none;" onclick="saveSettings()">Save changes</button>
+          <span class="form-note" style="align-self:center;">Changes apply instantly across the whole site.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MESSAGES MODAL -->
+<div class="modal-overlay" id="messagesOverlay">
+  <div class="modal">
+    <div class="modal-head"><h3>Visitor Questions</h3><button class="modal-close" onclick="closeModal('messagesOverlay')">&times;</button></div>
+    <div class="modal-body" id="messagesBody"></div>
+  </div>
+</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
